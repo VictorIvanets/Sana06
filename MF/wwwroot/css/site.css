@@ -1,0 +1,82 @@
+html {
+    font-size: 14px;
+    background-color: cadetblue
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+    background-color: cadetblue
+}
+
+.buttoncoords {
+    min-height: 0px;
+    max-height: max-content;
+    border: none;
+    outline:none;
+    background:none;
+    padding: 5px;
+}
+    .buttoncoords:hover {
+        background: #258cfb;
+        border-radius: 7px;
+        transition: all 0.3s
+    }
+h1, h2, h3, h4 {
+    margin: 0
+}
+.popup {
+    border-radius: 7px;
+    text-align: center
+}
+.place__details__links {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+.logoshopimg {
+    height: 100%;
+}
+
+.logoshop {
+    width: 110px;
+    height: 45px;
+    position: relative;
+}
+
+.navbarcolor {
+    background-color: cadetblue
+}
+
+.startpage {
+    width: 100%;
+    height: 100%;
+}
+
+.whitelink {
+    color: lightgrey;
+    text-decoration: none;
+    transition: all 0.3s
+}
+    .whitelink:hover {
+        color:antiquewhite;
+        transition: all 0.3s
+    }
+.p_weather{
+    margin: 2px
+}

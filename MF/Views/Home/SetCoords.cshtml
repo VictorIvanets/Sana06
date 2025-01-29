@@ -1,0 +1,62 @@
+﻿@model MF.Models.Coords
+
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<form method="post" asp-action="SetPlace">
+
+
+    <h1>Ваша локація</h1>
+    <p id="test"></p>
+    <input hidden id="lat" asp-for="Lat"/>
+    <input hidden id="lng" asp-for="Long"/>
+    <input type="submit"
+           class="btn btn-info w-100"
+           value="СТВОРИТИ ЗАПИС ПО ЦІМ КООРДИНАТАМ" />
+
+    <script src="~/lib/leaflet/leaflet.js"></script>
+    <script src="~/lib/leaflet/leaflet.min.js"></script>
+    <div id="map" style="width:80%;height:400px"></div>
+
+</form>
+
+
+
+
+<script>
+
+
+    var map = L.map('map').setView([@Model.Lat, @Model.Long], 14);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+
+
+
+
+    L.marker([@Model.Lat, @Model.Long]).addTo(map)
+        .bindPopup("TEST")
+        .openPopup;
+
+    var popup = L.popup();
+
+
+
+
+    function onMapClick(e) {
+        document.getElementById("test").textContent = `${e.latlng.lat}, ${e.latlng.lng}`
+        console.log(e.latlng)
+        popup
+            .setLatLng(e.latlng)
+            .setContent("ВАШЕ МІСЦЕ")
+            .openOn(map)
+
+    }
+
+    map.on('click', onMapClick);
+
+    
+
+</script>

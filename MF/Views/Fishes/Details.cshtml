@@ -1,0 +1,30 @@
+﻿@model MF.Models.Fishes
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Fishes</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.TypesFish)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.TypesFish.Type)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a class="whitelink" asp-action="Edit" asp-route-id="@Model?.id">Edit</a> |
+    <a class="whitelink" asp-action="Index">Back to List</a>
+</div>

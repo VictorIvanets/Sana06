@@ -1,0 +1,54 @@
+﻿@model IEnumerable<MF.Models.User>
+
+@{
+    ViewData["Title"] = "USERS";
+}
+
+<h1>Реєстраця користувачів</h1>
+<p>сторінка для адміна. Загально доступна реєстація буде окремо</p>
+
+<p>
+    <a class="whitelink" asp-action="Create">Додати користувача</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.password)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Roles)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.password)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Roles.Role)
+            </td>
+            <td>
+                    <a class="whitelink" asp-action="Edit" asp-route-id="@item.id">Edit</a> |
+                    <a class="whitelink" asp-action="Details" asp-route-id="@item.id">Details</a> |
+                    <a class="whitelink" asp-action="Delete" asp-route-id="@item.id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,67 @@
+﻿@model MF.Models.Place
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details Place</h1>
+<div class="row">
+    <div class="col-md-6">
+        
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Description)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+            <dt class="col-sm-4">
+                Google Map Link
+            </dt>
+            <dd class="col-sm-8">
+                <a class="whitelink" id="gstring" href="" target="_blank">Open</a>
+            </dd>
+        </dl>
+    </div>
+
+    <div class="col-md-6">
+        <script src="~/lib/leaflet/leaflet.js"></script>
+        <script src="~/lib/leaflet/leaflet.min.js"></script>
+        <div id="map" style="width:100%;height:400px"></div>
+    </div>
+</div>
+<div class="place__details__links">
+    <a class="whitelink" asp-controller="Stores" asp-action="Index">Back to Store</a>
+    <a class="whitelink" asp-action="Index">Back to List</a>
+</div>
+
+
+<script>
+
+    var jsModel = @Html.Raw(Json.Serialize(Model));
+
+    var stringGoogle = `https://www.google.com/maps?ll=${jsModel.lat},${jsModel.long}&q=${jsModel.lat},${jsModel.long}`
+
+    console.log(stringGoogle)
+    document.getElementById("gstring").href = stringGoogle
+
+    var map = L.map('map').setView([jsModel.lat, jsModel.long], 16);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+
+    L.marker([jsModel.lat, jsModel.long]).addTo(map)
+        .bindPopup(`${jsModel.name}`)
+        .openPopup;
+
+    var popup = L.popup();
+
+
+</script>

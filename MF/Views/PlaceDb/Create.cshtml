@@ -1,0 +1,99 @@
+﻿@model MF.Models.Place
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+
+<h1>Create Place</h1>
+<hr />
+<div class="row align-content-center">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Coords</label>
+                <input readonly id="lat" asp-for="Lat" class="form-control mb-2" />
+                <input readonly id="lng" asp-for="Long" class="form-control" />
+                <span asp-validation-for="Lat" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+    <div class="col-md-8">
+        <script src="~/lib/leaflet/leaflet.js"></script>
+        <script src="~/lib/leaflet/leaflet.min.js"></script>
+        <div id="map" style="width:100%;height:400px"></div>
+        <h2 id="wait" class="text-danger">Please wait coords</h2>
+    </div>
+
+</div>
+
+<div>
+    <a class="whitelink" asp-action="Index">Back to List</a>
+</div>
+
+
+
+<script>
+    navigator.geolocation.getCurrentPosition(
+        (position) => {
+            long = position.coords.longitude;
+            lat = position.coords.latitude;
+            document.getElementById("lat").value = lat;
+            document.getElementById("lng").value = long;
+
+            if (position.coords) {
+                document.getElementById("wait").textContent = '';
+                var map = L.map('map').setView([position.coords.latitude, position.coords.longitude], 14);
+                L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                }).addTo(map);
+
+                L.marker([position.coords.latitude, position.coords.longitude]).addTo(map)
+                    .bindPopup("ВИ ТУТ")
+                    .openPopup;
+
+                var popup = L.popup();
+
+
+                function onMapClick(e) {
+                    var lat = document.getElementById("lat").value = e.latlng.lat
+                    var lng = document.getElementById("lng").value = e.latlng.lng
+                    popup
+                        .setLatLng(e.latlng)
+                        .setContent(`Ваше місце`)
+                        .openOn(map)
+                }
+                map.on('click', onMapClick);
+
+
+            } 
+
+        },
+        (error) => {
+            console.error('Error getting user location:', error)
+        },
+    )
+
+</script>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
