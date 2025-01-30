@@ -35,34 +35,51 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Stores" asp-action="Index">ВСІ МІСЦЯ</a>
                         </li>
+                       
+                          @*   @if (User.Identity.IsAuthenticated)
+                            {
+                            <li class="nav-item">
+                                <p>USER @User.Identity.Name</p>
+                            </li>
+                            }
+                            else
+                            {
+                            <li class="nav-item">
+                                <p>NO USER</p>
+                            </li>
+                            } *@
 
+
+                         @if (User.IsInRole(MF.APPWC.AdminRole))
+                        {
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 ADMINISTRATION
                             </a>
                             <ul class="dropdown-menu">
-                                <li class="nav-item p-1">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Roles" asp-action="Index">Roles</a>
-                                </li>
                                 <li class="nav-item  p-1">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="TypesFish" asp-action="Index">Types Fish</a>
                                 </li>
                                 <li class="nav-item  p-1">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Fishes" asp-action="Index">Fishes</a>
                                 </li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li class="nav-item  p-1">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
-                                </li>
                                 <li class="nav-item  p-1">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="PlaceDb" asp-action="Index">Place</a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Create Admin</a>
                                 </li>
                             </ul>
                         </li>
 
-
-
+                        }
+                        else
+                        {
+                            <li></li>
+                        }
                     </ul>
+                        <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>
