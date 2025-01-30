@@ -1,19 +1,33 @@
 using MF.DB;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'AppDbContextConnection' not found.");
+
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
 string path = Directory.GetCurrentDirectory();
+
 
 builder.Services.AddDbContext<StoreDBContext>
     (optons => optons.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")
         .Replace("[DataDirectory]", path)
         ));
+
+//builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<StoreDBContext>();
+
+
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+    .AddDefaultTokenProviders().AddDefaultUI()
+    .AddEntityFrameworkStores<StoreDBContext>();
+
 
 
 builder.Services.AddHttpContextAccessor();
@@ -34,8 +48,11 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
+
 app.UseAuthorization();
 
+app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

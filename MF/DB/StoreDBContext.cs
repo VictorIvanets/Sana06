@@ -1,10 +1,12 @@
 ﻿using MF.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+
 using System;
 
 namespace MF.DB
 {
-    public class StoreDBContext : DbContext
+    public class StoreDBContext : IdentityDbContext
     {
         public StoreDBContext(DbContextOptions<StoreDBContext> options) : base(options) {         }
 
@@ -14,6 +16,7 @@ namespace MF.DB
         public DbSet<Coords> Coords { get; set; }
         public DbSet<PlaceDb> PlaceDb { get; set; }
         public DbSet<PlaceFishCollection> PlaceFishCollection { get; set; }
+        public DbSet<AppUser> ApplicationUser { get; set; }
 
     }
 }
