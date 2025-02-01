@@ -27,13 +27,13 @@ namespace MF.Controllers
             return View(await storeDBContext.ToListAsync());
         }
 
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
 
             var obj = _context.PlaceDb.Include(u => u.Coords).First(u => u.id == id);
 
 
-            Place place = new Place()
+            Place place = new ()
             {
 
                 Name = obj.Name,
@@ -96,7 +96,7 @@ namespace MF.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,Name,Description,CoordsId")] PlaceDb placeDb)
+        public IActionResult Edit(int id, [Bind("id,Name,Description,CoordsId")] PlaceDb placeDb)
         {
 
             if (id != placeDb.id)

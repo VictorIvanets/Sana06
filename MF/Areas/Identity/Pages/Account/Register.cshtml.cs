@@ -110,8 +110,8 @@ namespace MF.Areas.Identity.Pages.Account
 
             if (!await _roleManager.RoleExistsAsync(APPWC.AdminRole))
             {
-                await _roleManager.CreateAsync(new IdentityRole(APPWC.AdminRole));
-                await _roleManager.CreateAsync(new IdentityRole(APPWC.CustomerRole));
+                //await _roleManager.CreateAsync(new IdentityRole(APPWC.AdminRole));
+                //await _roleManager.CreateAsync(new IdentityRole(APPWC.CustomerRole));
             }
 
             ReturnUrl = returnUrl;

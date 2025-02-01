@@ -22,6 +22,22 @@ namespace MF.Controllers
 
         public async Task<IActionResult> Index()
         {
+
+
+
+            //List<string> UserFulNme = new();
+
+            //IEnumerable<AppUser> UserItem = _context.ApplicationUser;
+
+            //IEnumerable<AppUser> testur = UserItem;
+
+            //foreach (AppUser user in testur) {
+
+            //    UserFulNme.Add(user.FullName);
+            
+            //}
+
+
             var storeDBContext = _context.PlaceDb.Include(p => p.Coords);
             return View(await storeDBContext.ToListAsync());
         }
