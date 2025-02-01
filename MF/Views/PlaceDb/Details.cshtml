@@ -39,7 +39,10 @@
 </div>
 <div class="place__details__links">
     <a class="whitelink" asp-controller="Stores" asp-action="Index">Back to Store</a>
-    <a class="whitelink" asp-action="Index">Back to List</a>
+      @if (User.IsInRole(MF.APPWC.AdminRole))
+            {
+            <a class="whitelink" asp-action="Index">Back to List</a>
+             }
 </div>
 
 

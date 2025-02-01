@@ -17,6 +17,8 @@ namespace MF.DB
         public DbSet<PlaceDb> PlaceDb { get; set; }
         public DbSet<PlaceFishCollection> PlaceFishCollection { get; set; }
         public DbSet<AppUser> ApplicationUser { get; set; }
+        public DbSet<FishingSession> FishingSession { get; set; }
+        public DbSet<Weather> Weather { get; set; }
 
     }
 }

@@ -1,73 +1,70 @@
-﻿@model MF.Models.Coords
-
-@{
+﻿@{
     ViewData["Title"] = "Start Page";
 }
-<div class="startpage">
-    <h1 class="mb-5">Проєкт "My Fishing"</h1>
-    <p>Цей проект розробляється як курсова робота, <br />з використянням бази данних, <br /> та сторонньої біліотеки Leaflet (OpenStreetMap) для створення карт. </p>
-    <p>Пpоєкт у стадії розробки. На разі, в основному, використовується стилістика bootstrap,<br />але в подальшому дизайн буде змінено.</p>
-    <p> Основна логіка зараз знаходиться у розлі "ВСІ МІСЦЯ",  <br /> 
-        натиснувши на назву місця або макер на карті можна подивитися місце <br />
-        У вкладці ADMINISTRATION > Place > Створити місце, виберіть місце на карті <br />
-        Додайте назву, та збережіть.
-    </p>
-    <p>Надалі логіка додавання місця буде інша (це тільки адмінка),<br />
-        у користувачів буде додаватия сесія рибалки <br />
-        з додаванням місця, описом, списками риби, що тут ловлять, погодою, та фото.
-    </p>
-
-    <br />
-    <br />
-    <br />
-    <p>Цей проєкт я вже розробляв на TypeScript, фронт був написаний на React, бек на Nest.js, база данних MongoDB.
-        <br /> 
-        <span><a href="https://victorivanets.github.io/fishapp/ " class="whitelink">Link GitHub Pages</a></span>
-        <br />
-        <span><a href="https://github.com/VictorIvanets/fishing " class="whitelink">репозиторій на github</a></span>
-    </p>
-    <p>Також був розроблений Android додаток на React Native (Expo) <br /><span><a href="https://github.com/VictorIvanets/myfishing_v3" class="whitelink">репозиторій на github</a></span></p>
-</div>
-<div>
-    <h4 class="p_weather">Погода</h4>
-    <p class="p_weather">temp: <span id="temp"></span> °C</p>
-    <p class="p_weather">pressure: <span id="pressure"></span> mmHg</p>
-    <p class="p_weather">humidity: <span id="humidity"></span> %</p>
-    <p class="p_weather">wind speed: <span id="speed"></span> М/с</p>
-    <p class="p_weather">wind deg: <span id="deg"></span> deg</p>
-    <p class="p_weather">sky: <span id="sky"></span></p>
-</div>
 
 
-<script>
+@if (User.IsInRole(MF.APPWC.CustomerRole)){
 
-    var APIkey = "c37d5a8e792375836f2aa82ac92089f5";
-    var lat = "50.217";
-    var lon = "28.753";
-    var lang = "ua";
-    var units = "metric";
-    var URL = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${APIkey}&lang=${lang}&units=${units}`;
+@model IEnumerable<MF.Models.FishingSession>
 
-    fetch(URL)
-        .then((response) => {
-            return response.json();
-        })
-        .then((data) => {
-            document.getElementById("temp").textContent = data.main.temp
-                console.log(data.main.temp);
-            document.getElementById("pressure").textContent = data.main.pressure
-                console.log(data.main.pressure);
-            document.getElementById("humidity").textContent = data.main.humidity
-                console.log(data.main.humidity);
-            document.getElementById("speed").textContent = data.wind.speed
-                console.log(data.wind.speed);
-            document.getElementById("deg").textContent = data.wind.deg
-                console.log(data.wind.deg);
-            document.getElementById("sky").textContent = data.weather[0].description
-                console.log(data.weather[0].description);    
-        });
+    <div class="startpageheader">
+        <h1>МОЇ РИБАЛКИ</h1>
+        <a asp-area="" asp-controller="FishingSessions" asp-action="Create"><h4 class="nav-link text-dark">ДОДАТИ НОВУ РИБАЛКУ</h4></a>
+    </div>
 
-</script>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rating)
+            </th>
+             <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+           <td>
+               <a class="nav-link text-dark" asp-controller="FishingSessions" asp-action="Details" asp-route-id="@item.Id">
+                     @Html.DisplayFor(modelItem => item.Name)                 
+                </a>
+           </td>
+            <td>
+                 <a class="nav-link text-dark" asp-controller="FishingSessions" asp-action="Details" asp-route-id="@item.Id">
+                    @Html.DisplayFor(modelItem => item.Description)
+                 </a>
+             </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Rating)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+ }
+                        
+
+else
+{
+     <div>ADMIN</div>
+}
+
+
 
 
 

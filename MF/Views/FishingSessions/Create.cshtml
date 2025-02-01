@@ -1,0 +1,162 @@
+﻿
+
+@model MF.Models.ViewModels.FishingSessionVM
+
+@{
+
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>FishingSession</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Date" class="control-label"></label>
+                <input asp-for="Date" class="form-control" />
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Rating" class="control-label"></label>
+                <input type="number" min="0" max="10" asp-for="Rating" class="form-control" />
+                <span asp-validation-for="Rating" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserName" class="control-label"></label>
+                <input readonly asp-for="UserName" class="form-control" value="@User.Identity.Name" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="PlaceName" class="control-label"></label>
+                <input asp-for="PlaceName" class="form-control" />
+                <span asp-validation-for="PlaceName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PlaceDescription" class="control-label"></label>
+                <input asp-for="PlaceDescription" class="form-control" />
+                <span asp-validation-for="PlaceDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+            <div class="sessiondata">
+                <label class="">Coords & Weather</label>
+                <input readonly id="lat" asp-for="Lat" class="formhidden" />
+                <input readonly id="lng" asp-for="Lng" class="formhidden" />
+                <input readonly id="temp" asp-for="temp" class="formhidden" />
+                <input readonly id="pressure" asp-for="pressure" class="formhidden" />
+                <input readonly id="humidity" asp-for="humidity" class="formhidden" />
+                <input readonly id="speed" asp-for="speed" class="formhidden" />
+                <input readonly id="deg" asp-for="deg" class="formhidden" />
+                <input readonly id="sky" asp-for="sky" class="formhidden" />
+            </div>
+
+        </form>
+    </div>
+    <div class="col-md-8">
+        <script src="~/lib/leaflet/leaflet.js"></script>
+        <script src="~/lib/leaflet/leaflet.min.js"></script>
+        <div id="map" style="width:100%;height:400px"></div>
+        <h2 id="wait" class="text-danger">Please wait coords</h2>
+    </div>
+
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+<script>
+    navigator.geolocation.getCurrentPosition(
+        (position) => {
+            long = position.coords.longitude;
+            lat = position.coords.latitude;
+            document.getElementById("lat").value = lat;
+            document.getElementById("lng").value = long;
+
+            if (position.coords) {
+                document.getElementById("wait").textContent = '';
+                var map = L.map('map').setView([position.coords.latitude, position.coords.longitude], 14);
+                L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                }).addTo(map);
+
+                L.marker([position.coords.latitude, position.coords.longitude]).addTo(map)
+                    .bindPopup("ВИ ТУТ")
+                    .openPopup;
+
+                var popup = L.popup();
+
+
+                function onMapClick(e) {
+                    var lat = document.getElementById("lat").value = e.latlng.lat
+                    var lng = document.getElementById("lng").value = e.latlng.lng
+                    popup
+                        .setLatLng(e.latlng)
+                        .setContent(`Ваше місце`)
+                        .openOn(map)
+                }
+                map.on('click', onMapClick);
+
+
+            }
+
+        },
+        (error) => {
+            console.error('Error getting user location:', error)
+        },
+    )
+
+
+
+
+</script>
+
+<script>
+
+    var APIkey = "c37d5a8e792375836f2aa82ac92089f5";
+    var lat = "50.217";
+    var lon = "28.753";
+    var lang = "ua";
+    var units = "metric";
+    var URL = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${APIkey}&lang=${lang}&units=${units}`;
+
+    fetch(URL)
+        .then((response) => {
+            return response.json();
+        })
+        .then((data) => {
+            document.getElementById("temp").value = `temp: ${data.main.temp}`
+        
+            document.getElementById("pressure").value = `pressure: ${data.main.pressure}`
+          
+            document.getElementById("humidity").value = `humidity: ${data.main.humidity}`
+            
+            document.getElementById("speed").value = `wind speed: ${data.wind.speed}`
+           
+            document.getElementById("deg").value = `wind deg: ${data.wind.deg}`
+            
+            document.getElementById("sky").value = `sky: ${data.weather[0].description}`
+            
+        });
+
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
