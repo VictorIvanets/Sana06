@@ -1,79 +1,90 @@
-﻿@model MF.Models.FishingSession
+﻿@model MF.Models.ViewModels.FishSessionByCollectionVM
 
 @{
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
+<h1>@Model.FishingSession.Name</h1>
+<h4>Місце: @Model.FishingSession.PlaceDb.Name</h4>
 <div class="row">
-<div class="col-md-6">
-    
-    <h4>FishingSession</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-4">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-6">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-4">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-6">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-4">
-            @Html.DisplayNameFor(model => model.Date)
-        </dt>
-        <dd class = "col-sm-6">
-            @Html.DisplayFor(model => model.Date)
-        </dd>
-        <dt class = "col-sm-4">
-            @Html.DisplayNameFor(model => model.Rating)
-        </dt>
-        <dd class = "col-sm-6">
-            @Html.DisplayFor(model => model.Rating)
-        </dd>
-        <dt class = "col-sm-4">
-            @Html.DisplayNameFor(model => model.PlaceDb)
-        </dt>
-        <dd class = "col-sm-6">
-            @Html.DisplayFor(model => model.PlaceDb.Name)
-        </dd>
-        <dt class = "col-sm-4">
-            @Html.DisplayNameFor(model => model.ApplicationUser)
-        </dt>
-        <dd class = "col-sm-6">
-            @Html.DisplayFor(model => model.ApplicationUser.FullName)
-        </dd>
-
-        <dt class="col-sm-4">
-            Google Map Link
-        </dt>
-        <dd class="col-sm-8">
-            <a class="whitelink" id="gstring" href="" target="_blank">Open</a>
-        </dd>
-
-    </dl>
-    </div>
     <div class="col-md-6">
-    <script src="~/lib/leaflet/leaflet.js"></script>
-    <script src="~/lib/leaflet/leaflet.min.js"></script>
-    <div id="map" style="width:100%;height:400px"></div>
+
+        <p>User: @Model.FishingSession.ApplicationUser.FullName</p>
+        <hr />
+        <dl class="row mb-0">
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.FishingSession.Description)
+            </dt>
+            <dd class="col-sm-6">
+                @Html.DisplayFor(model => model.FishingSession.Description)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.FishingSession.Date)
+            </dt>
+            <dd class="col-sm-6">
+                @Html.DisplayFor(model => model.FishingSession.Date)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.FishingSession.Rating)
+            </dt>
+            <dd class="col-sm-6">
+                @Html.DisplayFor(model => model.FishingSession.Rating)
+            </dd>
+
+            <dt class="col-sm-4">
+                Google Map Link
+            </dt>
+            <dd class="col-sm-8">
+                <a class="whitelink" id="gstring" href="" target="_blank">Open</a>
+            </dd>
+
+        </dl>
+        <div>
+        <p class ="weathet__text" >@Model.FishingSession.Weather.Temp℃</p>
+        <p class ="weathet__text" >@Model.FishingSession.Weather.Pressure</p>
+        <p class ="weathet__text" >@Model.FishingSession.Weather.Humidity %</p>
+        <p class ="weathet__text" >@Model.FishingSession.Weather.Windspeed M/c</p>
+        <p class ="weathet__text" >@Model.FishingSession.Weather.Winddeg Deg</p>
+        <p class ="weathet__text" >@Model.FishingSession.Weather.Sky</p>
+        </div>
+        <div class="fishblok">
+            <div class="fishblokrow">
+                <h4 class="fishblok__head"> Що тут ловиться:</h4>
+                <a class="btn btn-primary whitelink"
+                   asp-controller="FishPlaceCollections"
+                   asp-action="Create"
+                   asp-route-id="@Model.FishingSession.Id">Додати/видалити рибу</a>
+            </div>
+            @foreach (var item in Model.AllFishPlaceCollection)
+            {
+                <div class="fishblok__item">
+                    <p class="fishblok__text mb-1">
+
+                        @Html.DisplayFor(modelItem => item.Fishes.Name)
+                    </p>
+                </div>
+             
+            }
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <script src="~/lib/leaflet/leaflet.js"></script>
+        <script src="~/lib/leaflet/leaflet.min.js"></script>
+        <div id="map" style="width:100%;height:400px"></div>
     </div>
 </div>
 
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model?.FishingSession.Id">Edit</a> |
+    <a asp-controller="Home" asp-action="Index">Back to Home</a>
 </div>
 
 
 <script>
 
-    var jsModel = @Html.Raw(Json.Serialize(Model));
+    var jsModel = @Html.Raw(Json.Serialize(Model.FishingSession));
     console.log(jsModel)
     console.log(jsModel.placeDb.coords.lat)
     console.log(jsModel.placeDb.coords.long)

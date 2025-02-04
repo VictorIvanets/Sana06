@@ -51,18 +51,35 @@ namespace MF.Controllers
                 return NotFound();
             }
 
+
+
             var fishingSession = await _context.FishingSession
                 .Include(f => f.ApplicationUser)
                 .Include(f => f.PlaceDb)
                 .Include(f => f.PlaceDb.Coords)
                 .Include(f => f.Weather)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (fishingSession == null)
             {
                 return NotFound();
             }
 
-            return View(fishingSession);
+            var storeDBContext = _context.FishPlaceCollection
+                .Where(f => f.PlaceDb.id == fishingSession.PlaceId)
+                .Include(f => f.Fishes)
+                .Include(f => f.PlaceDb);
+
+
+            FishSessionByCollectionVM data = new()
+            {
+                AllFishPlaceCollection = storeDBContext,
+                FishingSession = fishingSession,
+            };
+
+
+
+            return View(data);
         }
 
 
@@ -168,7 +185,7 @@ namespace MF.Controllers
                     throw;
                 }
             }
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Details", new { id });
 
         }
 
@@ -204,11 +221,16 @@ namespace MF.Controllers
             {
             var Place = await _context.PlaceDb.FindAsync(fishingSession.PlaceId);
             var Weather = await _context.Weather.FindAsync(fishingSession.WeatherId);
+            var Coords = await _context.Coords.FindAsync(fishingSession.PlaceDb.CoordsId);
+
+            var FishCollection = _context.FishPlaceCollection.Where(u => u.PlaceId == fishingSession.PlaceId);
 
                 _context.FishingSession.Remove(fishingSession);
-                if(Place != null && Weather != null) {
+                if(Place != null && Weather != null && FishCollection != null && Coords != null) {
                     _context.PlaceDb.Remove(Place);
+                    _context.Coords.Remove(Coords);
                     _context.Weather.Remove(Weather);
+                    _context.FishPlaceCollection.RemoveRange(FishCollection);
                 }
             }
 

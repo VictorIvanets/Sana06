@@ -108,3 +108,33 @@ h1, h2, h3, h4 {
     gap: 10px;
     justify-content: space-between
 }
+
+.fishblok {
+    width: 100%;
+    padding: 3px;
+    background: rgba( 140, 140,140, 0.7)
+}
+.fishblokrow {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between
+}
+.fishblok__head {
+    font-size: 1.2rem;
+    margin: 1px;
+}
+.fishblok__text {
+    font-size: 1rem;
+    margin: 1px;    
+}
+..weathet {
+
+}
+.weathet__text {
+    font-size: 0.75rem;
+    margin: 0.75px;
+}
+.fishblok__item {
+    width: 100%;
+    border-bottom: 1px solid black;
+}
